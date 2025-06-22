@@ -2,22 +2,34 @@ import { ActionOnLostSubscription } from '@vaadin/hilla-frontend';
 import { useSignal } from '@vaadin/hilla-react-signals';
 import {
   Button,
+  DatePicker,
+  Dialog,
   Grid,
   GridColumn,
   HorizontalLayout,
   Icon,
   Notification,
+  TextField,
   VerticalLayout,
 } from '@vaadin/react-components';
 import { ViewToolbar } from 'Frontend/components/ViewToolbar';
 import Reservation from 'Frontend/generated/com/example/application/reservation/Reservation';
-import { KafkaConsumerService } from 'Frontend/generated/endpoints';
+import { KafkaConsumerService, KafkaProducerService } from 'Frontend/generated/endpoints';
 import { useEffect } from 'react';
+import { useForm } from '@vaadin/hilla-react-form';
+import ReservationModel from 'Frontend/generated/com/example/application/reservation/ReservationModel';
 
 export default function ReservationsView() {
   const reservations = useSignal<Reservation[]>();
   const subscriptionNotificationOpened = useSignal<boolean>(false);
   const subscriptionNotificationMessage = useSignal<string | undefined>(undefined);
+  const newReservationDialogOpened = useSignal<boolean>(false);
+  const { model, field, clear, submit, invalid } = useForm(ReservationModel, {
+    onSubmit: async (reservation: Reservation) => {
+      await KafkaProducerService.produce(reservation);
+      closeNewReservationDialog();
+    },
+  });
 
   useEffect(() => {
     const reservationSubscription = KafkaConsumerService.getLatestReservation()
@@ -37,6 +49,11 @@ export default function ReservationsView() {
     subscriptionNotificationMessage.value = undefined;
   };
 
+  const closeNewReservationDialog = () => {
+    newReservationDialogOpened.value = false;
+    clear();
+  };
+
   const retrySubscription = () => {
     window.location.reload();
   };
@@ -49,6 +66,31 @@ export default function ReservationsView() {
         <GridColumn path={'date'} />
         <GridColumn path={'customer'} />
       </Grid>
+      <HorizontalLayout theme="margin" className="self-end">
+        <Button theme="primary" onClick={() => (newReservationDialogOpened.value = true)}>
+          New reservation
+        </Button>
+      </HorizontalLayout>
+      <Dialog
+        headerTitle={'New reservation'}
+        opened={newReservationDialogOpened.value}
+        onOpenedChanged={({ detail }) => {
+          newReservationDialogOpened.value = detail.value;
+        }}
+        footer={
+          <>
+            <Button onClick={closeNewReservationDialog}>Cancel</Button>
+            <Button theme="primary" disabled={invalid} onClick={submit}>
+              Add
+            </Button>
+          </>
+        }>
+        <VerticalLayout style={{ alignItems: 'stretch', width: '18rem', maxWidth: '100%' }}>
+          <TextField label="ID" {...field(model.id)} />
+          <DatePicker label="Date" {...field(model.date)} />
+          <TextField label="Customer" {...field(model.customer)} />
+        </VerticalLayout>
+      </Dialog>
       <Notification
         theme="warning"
         duration={0}
