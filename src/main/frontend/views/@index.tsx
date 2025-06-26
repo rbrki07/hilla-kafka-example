@@ -13,11 +13,11 @@ import {
   VerticalLayout,
 } from '@vaadin/react-components';
 import { ViewToolbar } from 'Frontend/components/ViewToolbar';
-import Reservation from 'Frontend/generated/com/example/application/reservation/Reservation';
+import Reservation from 'Frontend/generated/de/rwi/hillakafkaexample/reservation/Reservation';
 import { KafkaConsumerService, KafkaProducerService } from 'Frontend/generated/endpoints';
 import { useEffect } from 'react';
 import { useForm } from '@vaadin/hilla-react-form';
-import ReservationModel from 'Frontend/generated/com/example/application/reservation/ReservationModel';
+import ReservationModel from 'Frontend/generated/de/rwi/hillakafkaexample/reservation/ReservationModel';
 
 export default function ReservationsView() {
   const reservations = useSignal<Reservation[]>();

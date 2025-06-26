@@ -1,4 +1,4 @@
-package com.example.application.reservation;
+package de.rwi.hillakafkaexample.reservation;
 
 import java.time.LocalDate;
 

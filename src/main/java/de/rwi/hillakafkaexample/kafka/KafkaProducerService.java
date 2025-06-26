@@ -1,10 +1,11 @@
-package com.example.application.kafka;
+package de.rwi.hillakafkaexample.kafka;
 
 import org.springframework.kafka.core.KafkaTemplate;
 
-import com.example.application.reservation.Reservation;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
+
+import de.rwi.hillakafkaexample.reservation.Reservation;
 
 @BrowserCallable
 @AnonymousAllowed

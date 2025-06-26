@@ -1,12 +1,12 @@
-package com.example.application.kafka;
+package de.rwi.hillakafkaexample.kafka;
 
 import org.jspecify.annotations.NonNull;
 import org.springframework.kafka.annotation.KafkaListener;
 
-import com.example.application.reservation.Reservation;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 
+import de.rwi.hillakafkaexample.reservation.Reservation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 import reactor.core.publisher.Sinks.EmitResult;
