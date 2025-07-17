@@ -2,8 +2,7 @@ package de.rwi.hillakafkaexample.reservation;
 
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.NonNull;
 
-public record Reservation(@NotBlank String id, @NotNull LocalDate date, @NotBlank String customer) {
+public record Reservation(@NonNull String id, @NonNull LocalDate date, @NonNull String customer) {
 }
